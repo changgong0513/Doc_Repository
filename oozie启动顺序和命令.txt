@@ -1,0 +1,64 @@
+虚拟机名称：CentOS7-64-dongcheng
+虚拟机IP地址：192.168.110.133
+
+进入/usr/local/hadoop-2.7.7/sbin/目录：
+cd /usr/local/hadoop-2.7.7/sbin/
+
+启动hdfs:
+./start-dfs.sh
+
+启动yarn:
+./start-yarn.sh
+
+启动mapred的historyserver：
+./mr-jobhistory-daemon.sh start historyserver
+
+启动hivemetastore
+nohup hive --service metastore >> ~/metastore.log 2>&1 &
+
+启动hiveserver2
+nohup hive --service hiveserver2 >> ~/hiveserver2.log 2>&1 &
+
+查看启动的java进程：
+jps
+
+进入/usr/local/oozie/oozie-4.3.1/bin/目录：
+cd /usr/local/oozie/oozie-4.3.1/bin/
+
+启动oozie-server:
+./oozied.sh start
+
+查看oozie运行状态：
+oozie admin -oozie http://localhost:11000/oozie -status
+显示结果：System mode: NORMAL，正常启动。
+
+在oozie的根目录，运行命令，启动作业：
+oozie job -oozie http://localhost:11000/oozie -config ./examples/apps/shell/job.properties -run
+
+查看启动作业的信息：
+oozie job -oozie http://localhost:11000/oozie -info jobid
+
+查看启动作业的日志：
+oozie job -oozie http://localhost:11000/oozie -log jobid
+
+从HDFS文件系统访问本机文件系统的目录或者文件方法
+hdfs dfs -ls file:///usr
+hdfs dfs -ls file://usr
+hdfs dfs -ls file:/usr
+
+https://blog.csdn.net/fansy1990/article/details/81537696
+
+cd /usr/local/hadoop-2.7.7
+./bin/hdfs namenode -format
+
+hdfs dfs -put job.properties /user/root/dongcheng/apps/hive2/
+hdfs dfs -put workflow.xml /user/root/dongcheng/apps/hive2/
+hdfs dfs -put coordinator.xml /user/root/dongcheng/apps/hive2/
+hdfs dfs -ls /user/root/dongcheng/output-data/hive2
+
+hdfs dfs -rm -r -skipTrash /user/root/dongcheng/apps/hive2/job.properties
+hdfs dfs -rm -r -skipTrash /user/root/dongcheng/apps/hive2/workflow.xml
+hdfs dfs -rm -r -skipTrash /user/root/dongcheng/apps/hive2/coordinator.xml
+hdfs dfs -ls /user/root/dongcheng/output-data/hive2
+
+
